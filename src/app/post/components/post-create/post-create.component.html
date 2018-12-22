@@ -1,11 +1,28 @@
 <mat-card>
-  <mat-form-field>
-    <textarea matInput row="6" [(ngModel)]="title" #postInput></textarea>
-  </mat-form-field>
-  <mat-form-field>
-    <textarea matInput row="6" [(ngModel)]="content" #postInput></textarea>
-  </mat-form-field>
-  <button mat-raised-button color="accent" (click)="addPost()">
-    Save Post
-  </button>
+  <form [formGroup]="createPostFormGroup" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <input matInput placeholder="Title" formControlName="title" />
+      <mat-error *ngIf="createPostFormGroup.hasError('required', 'title')">
+        Please enter a title
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <textarea
+        matInput
+        row="6"
+        placeholder="Content"
+        formControlName="content"
+      ></textarea>
+      <mat-error *ngIf="createPostFormGroup.hasError('required', 'content')">
+        Please enter your some content
+      </mat-error>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="accent"
+      [disabled]="!createPostFormGroup.valid"
+    >
+      Save Post
+    </button>
+  </form>
 </mat-card>

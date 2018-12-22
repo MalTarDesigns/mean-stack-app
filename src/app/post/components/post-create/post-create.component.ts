@@ -1,5 +1,11 @@
-import { Component, OnInit, Output } from '@angular/core';
-import { EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  AbstractControl
+} from '@angular/forms';
+import { PostService } from '../../services/post.service';
 
 @Component({
   selector: 'app-post-create',
@@ -7,17 +13,42 @@ import { EventEmitter } from '@angular/core';
   styleUrls: ['./post-create.component.css']
 })
 export class PostCreateComponent implements OnInit {
-  title = '';
-  content = '';
-  @Output() postAdded = new EventEmitter<IPost>();
+  createPostFormGroup: FormGroup;
+  postAdded;
 
-  ngOnInit() {}
+  constructor(private fb: FormBuilder, private postService: PostService) {}
 
-  addPost() {
+  ngOnInit() {
+    this.createPostFormGroup = this.fb.group({
+      title: [
+        '',
+        Validators.compose([Validators.minLength(6), Validators.required])
+      ],
+      content: [
+        '',
+        Validators.compose([Validators.minLength(6), Validators.required])
+      ]
+    });
+  }
+
+  onSubmit() {
+    const form = this.createPostFormGroup;
     const post: IPost = {
-      title: this.title,
-      content: this.content
+      title: form.value.title,
+      content: form.value.content
     };
-    this.postAdded.emit(post);
+
+    this.resetForm(form);
+    this.postService.addPost(post);
+  }
+
+  private resetForm(formGroup: FormGroup) {
+    let control: AbstractControl = null;
+    formGroup.reset();
+    formGroup.markAsUntouched();
+    Object.keys(formGroup.controls).forEach(name => {
+      control = formGroup.controls[name];
+      control.setErrors(null);
+    });
   }
 }
