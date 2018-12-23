@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const config = require("./config/database");
 
 const postsRoutes = require("./routes/posts");
 
@@ -8,7 +9,7 @@ const app = express();
 
 mongoose
   .connect(
-    "mongodb+srv://jay:<PASSWORD>@cluster0-pjpd1.mongodb.net/mean-stack?retryWrites=true",
+    config.development.database,
     { useNewUrlParser: true }
   )
   .then(() => {

@@ -4,6 +4,7 @@ const Post = require("../models/post");
 
 const router = express.Router();
 
+// ADD A POSTS
 router.post("/", (req, res, next) => {
   const post = new Post({
     title: req.body.title,
@@ -17,6 +18,7 @@ router.post("/", (req, res, next) => {
   });
 });
 
+// UPDATE A POSTS
 router.put("/:id", (req, res, next) => {
   const post = new Post({
     _id: req.body.id,
@@ -38,6 +40,7 @@ router.get("/", (req, res, next) => {
   });
 });
 
+// GET A POST
 router.get("/:id", (req, res, next) => {
   Post.findById(req.params.id).then(post => {
     if (post) {
@@ -48,6 +51,7 @@ router.get("/:id", (req, res, next) => {
   });
 });
 
+// DELETE A POST
 router.delete("/:id", (req, res, next) => {
   Post.deleteOne({ _id: req.params.id }).then(result => {
     console.log(result);
