@@ -32,11 +32,8 @@ router.put("/:id", (req, res, next) => {
 
 // GET ALL POSTS
 router.get("/", (req, res, next) => {
-  Post.find().then(documents => {
-    res.status(200).json({
-      message: "Posts fetched successfully!",
-      posts: documents
-    });
+  Post.find().then(posts => {
+    res.status(200).json(posts);
   });
 });
 

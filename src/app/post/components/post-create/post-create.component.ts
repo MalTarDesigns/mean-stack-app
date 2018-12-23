@@ -14,7 +14,6 @@ import { PostService } from '../../services/post.service';
 })
 export class PostCreateComponent implements OnInit {
   createPostFormGroup: FormGroup;
-  postAdded;
 
   constructor(private fb: FormBuilder, private postService: PostService) {}
 
@@ -34,6 +33,7 @@ export class PostCreateComponent implements OnInit {
   onSubmit() {
     const form = this.createPostFormGroup;
     const post: IPost = {
+      id: null,
       title: form.value.title,
       content: form.value.content
     };
