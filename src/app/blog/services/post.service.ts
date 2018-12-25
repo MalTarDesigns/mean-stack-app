@@ -53,8 +53,8 @@ export class PostService {
     return { ...this.posts.find(p => p.id === id) };
   }
 
-  updatePost(id: string, title: string, content: string) {
-    const post: IPost = { id: id, title: title, content: content };
+  updatePost(id: string, post: IPost) {
+    // const post: IPost = { id: id, title: post.title, content: post.content };
     this.http.put(this.POST_API_URL + id, post).subscribe(response => {
       const updatedPosts = [...this.posts];
       const oldPostIndex = updatedPosts.findIndex(p => p.id === post.id);
