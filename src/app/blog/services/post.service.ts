@@ -1,15 +1,16 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { Subject } from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { map } from "rxjs/operators";
+import { Router } from "@angular/router";
 
 @Injectable()
 export class PostService {
-  POST_API_URL = 'http://localhost:3000/api/posts/';
+  POST_API_URL = "http://localhost:3000/api/posts/";
   private posts: IPost[] = [];
   private postsUpdated = new Subject<IPost[]>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   getPostUpdateListener() {
     return this.postsUpdated.asObservable();
@@ -30,8 +31,6 @@ export class PostService {
         })
       )
       .subscribe(transformedPosts => {
-        console.log(transformedPosts);
-
         this.posts = transformedPosts;
         this.postsUpdated.next([...this.posts]);
       });
@@ -45,23 +44,23 @@ export class PostService {
         post.id = id;
         this.posts.push(post);
         this.postsUpdated.next([...this.posts]);
-        // this.router.navigate(["/"]);
+        this.router.navigate(["/"]);
       });
   }
 
   getPost(id: string) {
-    return { ...this.posts.find(p => p.id === id) };
+    return this.http.get(this.POST_API_URL + id);
   }
 
   updatePost(id: string, title: string, content: string) {
-    const post: IPost = { id: id, title: title, content: content };
-    this.http.put(this.POST_API_URL + id, post).subscribe(response => {
-      const updatedPosts = [...this.posts];
-      const oldPostIndex = updatedPosts.findIndex(p => p.id === post.id);
-      updatedPosts[oldPostIndex] = post;
-      this.posts = updatedPosts;
-      this.postsUpdated.next([...this.posts]);
-      // this.router.navigate(["/"]);
+    const post = { id: id, title: title, content: content };
+    this.http.put(this.POST_API_URL + id, post).subscribe(res => {
+      // const updatedPosts = [...this.posts];
+      // const oldPostIndex = updatedPosts.findIndex(p => p.id === post.id);
+      // updatedPosts[oldPostIndex] = post;
+      // this.posts = updatedPosts;
+      // this.postsUpdated.next([...this.posts]);
+      this.router.navigate(["/"]);
     });
   }
 

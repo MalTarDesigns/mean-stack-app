@@ -1,7 +1,12 @@
 <mat-card>
   <form [formGroup]="createPostFormGroup" (ngSubmit)="onSubmit()">
     <mat-form-field>
-      <input matInput placeholder="Title" formControlName="title" />
+      <input
+        matInput
+        placeholder="Title"
+        formControlName="title"
+        value="{{ post?.title }}"
+      />
       <mat-error *ngIf="createPostFormGroup.hasError('required', 'title')">
         Please enter a title
       </mat-error>
@@ -12,6 +17,7 @@
         row="6"
         placeholder="Content"
         formControlName="content"
+        value="{{ post?.content }}"
       ></textarea>
       <mat-error *ngIf="createPostFormGroup.hasError('required', 'content')">
         Please enter your some content
