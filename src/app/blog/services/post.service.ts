@@ -1,12 +1,12 @@
-import { Injectable } from "@angular/core";
-import { Subject } from "rxjs";
-import { HttpClient } from "@angular/common/http";
-import { map } from "rxjs/operators";
-import { Router } from "@angular/router";
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class PostService {
-  POST_API_URL = "http://localhost:3000/api/posts/";
+  POST_API_URL = 'http://localhost:3000/api/posts/';
   private posts: IPost[] = [];
   private postsUpdated = new Subject<IPost[]>();
 
@@ -25,7 +25,8 @@ export class PostService {
             return {
               title: post.title,
               content: post.content,
-              id: post._id
+              id: post._id,
+              imagePath: post.imagePath
             };
           });
         })
@@ -37,14 +38,22 @@ export class PostService {
   }
 
   addPost(post: IPost) {
+    const postData = new FormData(); // needed to upload files to backend
+    postData.append('title', post.title);
+    postData.append('content', post.content);
+    postData.append('image', post.imagePath, post.title);
     return this.http
-      .post(this.POST_API_URL, post)
+      .post(this.POST_API_URL, postData)
       .subscribe((responseData: any) => {
-        const id = responseData.postId;
-        post.id = id;
-        this.posts.push(post);
+        const newPost: IPost = {
+          id: responseData.post.id,
+          title: post.title,
+          content: post.content,
+          imagePath: responseData.post.imagePath
+        };
+        this.posts.push(newPost);
         this.postsUpdated.next([...this.posts]);
-        this.router.navigate(["/"]);
+        this.router.navigate(['/']);
       });
   }
 
@@ -52,15 +61,35 @@ export class PostService {
     return this.http.get(this.POST_API_URL + id);
   }
 
-  updatePost(id: string, title: string, content: string) {
-    const post = { id: id, title: title, content: content };
-    this.http.put(this.POST_API_URL + id, post).subscribe(res => {
-      // const updatedPosts = [...this.posts];
-      // const oldPostIndex = updatedPosts.findIndex(p => p.id === post.id);
-      // updatedPosts[oldPostIndex] = post;
-      // this.posts = updatedPosts;
-      // this.postsUpdated.next([...this.posts]);
-      this.router.navigate(["/"]);
+  updatePost(id: string, updatedPost: IPost) {
+    let postData: IPost | FormData;
+    if (typeof updatedPost.imagePath === 'object') {
+      postData = new FormData(); // needed to upload files to backend
+      postData.append('id', id);
+      postData.append('title', updatedPost.title);
+      postData.append('content', updatedPost.content);
+      postData.append('image', updatedPost.imagePath, updatedPost.title);
+    } else {
+      postData = {
+        id: id,
+        title: updatedPost.title,
+        content: updatedPost.content,
+        imagePath: updatedPost.imagePath
+      };
+    }
+    this.http.put(this.POST_API_URL + id, postData).subscribe(res => {
+      const updatedPosts = [...this.posts];
+      const oldPostIndex = updatedPosts.findIndex(p => p.id === id);
+      const post: IPost = {
+        id: id,
+        title: updatedPost.title,
+        content: updatedPost.content,
+        imagePath: ''
+      };
+      updatedPosts[oldPostIndex] = post;
+      this.posts = updatedPosts;
+      this.postsUpdated.next([...this.posts]);
+      this.router.navigate(['/']);
     });
   }
 

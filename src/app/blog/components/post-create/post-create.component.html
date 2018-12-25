@@ -11,6 +11,16 @@
         Please enter a title
       </mat-error>
     </mat-form-field>
+
+    <app-file-upload
+      [supportedFileTypes]="['image']"
+      (selectedFile)="onFileSeclect($event)"
+    ></app-file-upload>
+
+    <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview">
+      <img [src]="imagePreview" alt="form.value.title" />
+    </div>
+
     <mat-form-field>
       <textarea
         matInput
