@@ -4,9 +4,11 @@ import { AuthRoutes } from './auth.routes';
 import { LoginComponent } from './components/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SignupComponent } from './components/signup/signup.component';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   imports: [SharedModule, AuthRoutes, FormsModule, ReactiveFormsModule],
-  declarations: [LoginComponent, SignupComponent]
+  declarations: [LoginComponent, SignupComponent],
+  providers: [AuthService]
 })
 export class AuthModule {}
