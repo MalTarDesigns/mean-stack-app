@@ -34,8 +34,9 @@ yarn-error.log
 testem.log
 /typings
 
-#config
+#backend
 /backend/config/*
+/backend/images/*
 
 # System Files
 .DS_Store

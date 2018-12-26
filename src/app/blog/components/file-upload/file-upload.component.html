@@ -1,0 +1,10 @@
+<button mat-stroked-button type="button" (click)="imgFileInput.click()">
+  Pick Image
+</button>
+
+<input
+  class="file-input"
+  type="file"
+  (change)="startUpload($event.target.files)"
+  #imgFileInput
+/>
