@@ -30,7 +30,7 @@ const storage = multer.diskStorage({
   }
 });
 
-// ADD A POSTS
+// ADD A POST
 router.post(
   "/",
   multer({ storage: storage }).single("image"),
@@ -53,7 +53,7 @@ router.post(
   }
 );
 
-// UPDATE A POSTS
+// UPDATE A POST
 router.put(
   "/:id",
   multer({ storage: storage }).single("image"),
