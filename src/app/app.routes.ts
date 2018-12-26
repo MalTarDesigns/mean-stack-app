@@ -5,6 +5,10 @@ const appRoutes: Routes = [
   {
     path: '',
     loadChildren: './blog/blog.module#BlogModule'
+  },
+  {
+    path: 'auth',
+    loadChildren: './auth/auth.module#AuthModule'
   }
 ];
 @NgModule({

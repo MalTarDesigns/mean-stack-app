@@ -1,0 +1,30 @@
+<mat-card>
+  <form [formGroup]="loginFormGroup" (ngSubmit)="onLoginSubmit()">
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Email"
+        dividerColor="accent"
+        formControlName="email"
+      />
+      <mat-error *ngIf="!loginFormGroup.controls['email'].valid">
+        Please enter a valid email
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Password"
+        type="password"
+        dividerColor="accent"
+        formControlName="password"
+      />
+      <mat-error *ngIf="!loginFormGroup.controls['password'].valid">
+        Please enter a valid password (min of 6 characters)
+      </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="accent" [disabled]="!loginFormGroup.valid">
+      Login
+    </button>
+  </form>
+</mat-card>
