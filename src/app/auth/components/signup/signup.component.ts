@@ -2,17 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.scss']
 })
-export class LoginComponent implements OnInit {
-  loginFormGroup: FormGroup;
+export class SignupComponent implements OnInit {
+  signupFormGroup: FormGroup;
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
-    this.loginFormGroup = this.fb.group({
+    this.signupFormGroup = this.fb.group({
       email: ['', [Validators.email, Validators.required]],
       password: [
         '',
@@ -21,8 +21,8 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onLoginSubmit() {
-    const form = this.loginFormGroup;
+  onSignupSubmit() {
+    const form = this.signupFormGroup;
     const user = {
       email: form.value.email,
       password: form.value.password
