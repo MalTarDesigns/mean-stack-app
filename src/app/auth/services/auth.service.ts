@@ -10,9 +10,18 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   addUser(user: IAuth) {
-    const newUser = { email: user.email, password: user.password };
+    const authData: IAuth = { email: user.email, password: user.password };
     return this.http
-      .post(this.USER_API_URL + 'signup', newUser)
+      .post(this.USER_API_URL + 'signup', authData)
+      .subscribe((responseData: any) => {
+        console.log(responseData);
+      });
+  }
+
+  login(user: IAuth) {
+    const authData: IAuth = { email: user.email, password: user.password };
+    return this.http
+      .post(this.USER_API_URL + 'login', authData)
       .subscribe((responseData: any) => {
         console.log(responseData);
       });

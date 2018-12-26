@@ -1,12 +1,14 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
 
 const router = express.Router();
 
-// ADD A User
+// USER SIGNUP
 router.post("/signup", (req, res, next) => {
+  // hash password
   bcrypt.hash(req.body.password, 10).then(hash => {
     const user = new User({
       email: req.body.email,
@@ -28,25 +30,36 @@ router.post("/signup", (req, res, next) => {
   });
 });
 
-// UPDATE A USER
-router.put("/:id", (req, res, next) => {});
+// USER LOGIN
+router.post("/login", (req, res, next) => {
+  let fetchUser;
+  User.findOne({ email: req.body.email })
+    .then(user => {
+      if (!user) {
+        return res.status(401).json({ message: "Auth failed!" });
+      }
+      fetchUser = user;
+      return bcrypt.compare(req.body.password, user.password);
+    })
+    .then(result => {
+      if (!result) {
+        return result.status(401).json({ message: "Auth failed!" });
+      }
+      // JWT WEB TOKEN
+      const token = jwt.sign(
+        { email: fetchUser.email, userId: fetchUser._id },
+        "secrect_this_should_be_longer",
+        { expiresIn: "1h" }
+      );
+      res.status(200).json({ token: token });
+    })
+    .catch(err => {
+      console.log(err);
 
-// GET ALL USERS
-router.get("/", (req, res, next) => {
-  User.find().then(users => {
-    res.status(200).json(users);
-  });
-});
-
-// GET A USER
-router.get("/:id", (req, res, next) => {
-  User.findById(req.params.id).then(user => {
-    if (user) {
-      res.status(200).json(user);
-    } else {
-      res.status(404).json({ message: "User not found!" });
-    }
-  });
+      res.status(500).json({
+        error: err
+      });
+    });
 });
 
 // DELETE A USER
