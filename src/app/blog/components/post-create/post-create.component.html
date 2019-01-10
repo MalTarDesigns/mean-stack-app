@@ -7,7 +7,7 @@
         formControlName="title"
         value="{{ post?.title }}"
       />
-      <mat-error *ngIf="createPostFormGroup.hasError('required', 'title')">
+      <mat-error *ngIf="!createPostFormGroup.controls['title'].valid">
         Please enter a title
       </mat-error>
     </mat-form-field>
@@ -29,7 +29,7 @@
         formControlName="content"
         value="{{ post?.content }}"
       ></textarea>
-      <mat-error *ngIf="createPostFormGroup.hasError('required', 'content')">
+      <mat-error *ngIf="!createPostFormGroup.controls['content'].valid">
         Please enter your some content
       </mat-error>
     </mat-form-field>
